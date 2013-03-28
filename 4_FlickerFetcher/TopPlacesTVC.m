@@ -8,7 +8,7 @@
 
 #import "TopPlacesTVC.h"
 #import "FlickrFetcher.h"
-#import "RecentFromPlacesTVC.h"
+#import "PhotosFromPlaceTVC.h"
 
 @interface TopPlacesTVC ()
 @property NSArray *topData;
@@ -26,10 +26,14 @@
     }
     return self;
 }
+- (IBAction)refresh:(UIBarButtonItem *)sender {
+    [self viewDidLoad];
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIBarButtonItem *oldButton = self.navigationItem.rightBarButtonItem;
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"_content" ascending:YES];
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [spinner startAnimating];
@@ -42,6 +46,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             self.topData = places;
             [spinner stopAnimating];
+            self.navigationItem.rightBarButtonItem = oldButton;
         });
     });
 }
@@ -64,8 +69,8 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"View Top Place Image"]) {
-        RecentFromPlacesTVC *dest = segue.destinationViewController;
+    if ([[segue identifier] isEqualToString:@"View Photos From Place"]) {
+        PhotosFromPlaceTVC *dest = segue.destinationViewController;
         
         //selectedPlace is set when a cell is selected
         NSDictionary *place = [self.topData objectAtIndex:self.tableView.indexPathForSelectedRow.row];

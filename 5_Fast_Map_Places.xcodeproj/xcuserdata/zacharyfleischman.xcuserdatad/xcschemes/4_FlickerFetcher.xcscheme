@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1CF25D6F16E07FC800248BEA"
-               BuildableName = "4_FlickerFetcher.app"
+               BuildableName = "5_Fast_Map_Places.app"
                BlueprintName = "5_Fast_Map_Places"
                ReferencedContainer = "container:5_Fast_Map_Places.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1CF25D6F16E07FC800248BEA"
-            BuildableName = "4_FlickerFetcher.app"
+            BuildableName = "5_Fast_Map_Places.app"
             BlueprintName = "5_Fast_Map_Places"
             ReferencedContainer = "container:5_Fast_Map_Places.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1CF25D6F16E07FC800248BEA"
-            BuildableName = "4_FlickerFetcher.app"
+            BuildableName = "5_Fast_Map_Places.app"
             BlueprintName = "5_Fast_Map_Places"
             ReferencedContainer = "container:5_Fast_Map_Places.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1CF25D6F16E07FC800248BEA"
-            BuildableName = "4_FlickerFetcher.app"
+            BuildableName = "5_Fast_Map_Places.app"
             BlueprintName = "5_Fast_Map_Places"
             ReferencedContainer = "container:5_Fast_Map_Places.xcodeproj">
          </BuildableReference>

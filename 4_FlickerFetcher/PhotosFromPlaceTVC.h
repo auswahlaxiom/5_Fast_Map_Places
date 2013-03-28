@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface RecentFromPlacesTVC : UITableViewController
+#import "PhotosTVC.h"
+@interface PhotosFromPlaceTVC : PhotosTVC
 @property NSDictionary *place;
 @end

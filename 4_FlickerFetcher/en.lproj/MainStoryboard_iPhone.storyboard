@@ -36,7 +36,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
-                                    <segue destination="THb-tS-qUY" kind="push" identifier="View Top Place Image" id="hbw-Pe-M7q"/>
+                                    <segue destination="THb-tS-qUY" kind="push" identifier="View Photos From Place" id="hbw-Pe-M7q"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -45,7 +45,13 @@
                             <outlet property="delegate" destination="5Nc-57-wXc" id="mlC-mF-RD9"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Top Places" id="2ro-zE-joW"/>
+                    <navigationItem key="navigationItem" title="Top Places" id="2ro-zE-joW">
+                        <barButtonItem key="rightBarButtonItem" title="Refresh" id="evD-kB-I3h">
+                            <connections>
+                                <action selector="refresh:" destination="5Nc-57-wXc" id="6Sj-DV-wbU"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FkA-om-4Em" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -85,16 +91,16 @@
             </objects>
             <point key="canvasLocation" x="2801" y="400"/>
         </scene>
-        <!--Recent From PlacesTVC - A Place-->
+        <!--Photos From PlaceTVC - A Place-->
         <scene sceneID="LMB-3r-1QK">
             <objects>
-                <tableViewController id="THb-tS-qUY" customClass="RecentFromPlacesTVC" sceneMemberID="viewController">
+                <tableViewController id="THb-tS-qUY" customClass="PhotosFromPlaceTVC" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="48e-k0-LLP">
                         <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Top Place Picture Cell" textLabel="vUP-Lk-0zh" detailTextLabel="Oaw-Xy-xZb" style="IBUITableViewCellStyleSubtitle" id="HTB-3K-cD7">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Photo Cell" textLabel="vUP-Lk-0zh" detailTextLabel="Oaw-Xy-xZb" style="IBUITableViewCellStyleSubtitle" id="HTB-3K-cD7">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -117,7 +123,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
-                                    <segue destination="cbq-zj-cOF" kind="push" identifier="View Photo From Place" id="vlM-sV-CEU"/>
+                                    <segue destination="cbq-zj-cOF" kind="push" identifier="View Photo" id="vlM-sV-CEU"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -141,7 +147,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Recent Picture Cell" textLabel="Xnc-Xt-PG2" detailTextLabel="43T-HB-cTz" style="IBUITableViewCellStyleSubtitle" id="c4G-Ln-jHa">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Photo Cell" textLabel="Xnc-Xt-PG2" detailTextLabel="43T-HB-cTz" style="IBUITableViewCellStyleSubtitle" id="c4G-Ln-jHa">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -164,7 +170,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <connections>
-                                    <segue destination="cbq-zj-cOF" kind="push" identifier="View Photo From Recent" id="K6y-En-279"/>
+                                    <segue destination="cbq-zj-cOF" kind="push" identifier="View Photo" id="K6y-En-279"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -243,6 +249,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="K6y-En-279"/>
+        <segue reference="vlM-sV-CEU"/>
     </inferredMetricsTieBreakers>
 </document>
