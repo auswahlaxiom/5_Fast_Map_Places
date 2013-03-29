@@ -26,7 +26,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jb6-CP-v9U" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3111" y="-1382"/>
+            <point key="canvasLocation" x="3441" y="-1392"/>
         </scene>
         <!--Photo Scroll View Controller-->
         <scene sceneID="DzE-D2-c4M">
@@ -131,7 +131,7 @@
                     <navigationItem key="navigationItem" id="deS-Td-Twl">
                         <barButtonItem key="rightBarButtonItem" title="View Map" id="E0Q-wK-Yx4">
                             <connections>
-                                <segue destination="bWk-YQ-Cuw" kind="push" identifier="View Map" id="4gh-Ud-zCf"/>
+                                <segue destination="cRh-vg-D7Q" kind="push" identifier="View Map" id="0Ew-Nw-eh9"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -188,7 +188,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tib-UQ-71Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2732" y="-2260"/>
+            <point key="canvasLocation" x="2966" y="-2236"/>
         </scene>
         <!--Recent PhotosTVC-->
         <scene sceneID="wo1-ox-anW">
@@ -297,42 +297,39 @@
             </objects>
             <point key="canvasLocation" x="1498" y="-1016"/>
         </scene>
+        <!--Flickr Map View Controller-->
+        <scene sceneID="rdi-TA-5yu">
+            <objects>
+                <viewController id="cRh-vg-D7Q" customClass="FlickrMapViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Gts-zD-BIl">
+                        <rect key="frame" x="0.0" y="64" width="320" height="739"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="FYg-Ki-GkZ">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="739"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="he2-4K-pG5"/>
+                    <connections>
+                        <outlet property="mapView" destination="FYg-Ki-GkZ" id="zON-Ea-oV3"/>
+                        <segue destination="Wbe-Pb-tFD" kind="push" identifier="View Photos From Place" id="z6R-TN-Zo6"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JQV-G2-eDe" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2496" y="-2828"/>
+        </scene>
     </scenes>
-    <classes>
-        <class className="FlickrMapViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FlickrMapViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="mapView" candidateClass="MKMapView"/>
-            </relationships>
-        </class>
-        <class className="PhotoScrollViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotoScrollViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="imageView" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="toolbar" candidateClass="UIToolbar"/>
-                <relationship kind="outlet" name="toolbarSpinner" candidateClass="UIActivityIndicatorView"/>
-            </relationships>
-        </class>
-        <class className="PhotosFromPlaceTVC" superclassName="PhotosTVC">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotosFromPlaceTVC.h"/>
-        </class>
-        <class className="PhotosTVC" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/PhotosTVC.h"/>
-        </class>
-        <class className="RecentPhotosTVC" superclassName="PhotosTVC">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RecentPhotosTVC.h"/>
-        </class>
-        <class className="TopPlacesTVC" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/TopPlacesTVC.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="z6R-TN-Zo6"/>
         <segue reference="AN8-uP-yfU"/>
     </inferredMetricsTieBreakers>
 </document>

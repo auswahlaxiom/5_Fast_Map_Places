@@ -48,7 +48,7 @@
                     <navigationItem key="navigationItem" title="Top Places" id="2ro-zE-joW">
                         <barButtonItem key="rightBarButtonItem" title="View Map" id="xJr-ZF-R8W">
                             <connections>
-                                <segue destination="foQ-J5-vqH" kind="push" identifier="View Map" id="HZ9-01-elN"/>
+                                <segue destination="DNr-pq-TK1" kind="push" identifier="View Map" id="nEI-gR-4np"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -75,11 +75,12 @@
                     <navigationItem key="navigationItem" id="ARp-Wr-uPL"/>
                     <connections>
                         <outlet property="mapView" destination="ZcQ-gz-2QB" id="eAC-Dv-IA7"/>
+                        <segue destination="cbq-zj-cOF" kind="push" identifier="View Photo" id="6Bz-Ao-P2r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vno-On-6T7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2260" y="-624"/>
+            <point key="canvasLocation" x="2848" y="-160"/>
         </scene>
         <!--Photo Scroll View Controller - Photo-->
         <scene sceneID="36J-ne-dnz">
@@ -113,7 +114,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rpA-hd-1pg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2801" y="400"/>
+            <point key="canvasLocation" x="3225" y="412"/>
         </scene>
         <!--Photos From PlaceTVC - A Place-->
         <scene sceneID="LMB-3r-1QK">
@@ -278,6 +279,31 @@
             </objects>
             <point key="canvasLocation" x="1289" y="705"/>
         </scene>
+        <!--Flickr Map View Controller-->
+        <scene sceneID="OUq-pD-41v">
+            <objects>
+                <viewController id="DNr-pq-TK1" customClass="FlickrMapViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8b8-on-cij">
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="QIy-Jv-Xag">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="OLI-t2-lHf"/>
+                    <connections>
+                        <outlet property="mapView" destination="QIy-Jv-Xag" id="ekS-ZA-0hZ"/>
+                        <segue destination="THb-tS-qUY" kind="push" identifier="View Photos From Place" id="BkH-dM-40F"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UHf-oz-VCk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2276" y="-732"/>
+        </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -286,6 +312,7 @@
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
         <segue reference="K6y-En-279"/>
+        <segue reference="BkH-dM-40F"/>
         <segue reference="Dm2-2v-1z7"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -9,6 +9,9 @@
 #import "FlickrMapViewController.h"
 #import "FlickrFetcher.h"
 #import "FlickrPhotoAnnotation.h"
+#import "FlickrPlaceAnnotation.h"
+#import "PhotoScrollViewController.h"
+#import "PhotosFromPlaceTVC.h"
 #import <MapKit/MapKit.h>
 
 @interface FlickrMapViewController ()
@@ -33,6 +36,7 @@
     [self updateMapView];
 }
 -(void)updateMapView {
+    self.mapView.delegate = self;
     if(self.mapView.annotations) [self.mapView removeAnnotations:self.mapView.annotations];
     [self.mapView addAnnotations:self.annotations];
     if(self.mapView.window) [self zoomToFitMapAnnotations:self.mapView];
@@ -41,17 +45,64 @@
     [super viewDidLoad];
     self.mapView.delegate = self;
 }
--(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
-    MKAnnotationView *aView = [mapView dequeueReusableAnnotationViewWithIdentifier:@"MapVC"];
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:@"View Photos From Place"]) {
+        FlickrPlaceAnnotation *fpa = sender; //(FlickrPlaceAnnotation *)
+        PhotosFromPlaceTVC *dest = segue.destinationViewController;
+        dest.place = fpa.place;
+        dest.navigationItem.title = [[[dest.place objectForKey:@"_content"] componentsSeparatedByString:@", "] objectAtIndex:0];
+    } else if([segue.identifier isEqualToString:@"View Photo"]) {
+        PhotoScrollViewController *dest = segue.destinationViewController;
+        FlickrPhotoAnnotation *fpa = sender;
+        dest.photo = fpa.photo;
+        if([fpa.photo objectForKey:@"title"] != @"") {
+            dest.navigationItem.title =[fpa.photo objectForKey:@"title"];
+        } else {
+            dest.navigationItem.title = @"Unknown";
+        }
+    }
+}
+- (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation {
+    
+    MKAnnotationView *aView = [theMapView dequeueReusableAnnotationViewWithIdentifier:@"MapVC"];
     if(!aView) {
         aView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"MapVC"];
         aView.canShowCallout = YES;
         aView.leftCalloutAccessoryView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        
     }
+    UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    aView.rightCalloutAccessoryView = rightButton;
     aView.annotation = annotation;
     [(UIImageView *)aView.leftCalloutAccessoryView setImage:nil];
     
     return aView;
+}
+- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view calloutAccessoryControlTapped:(UIControl *)control {
+    if([view.annotation isKindOfClass:[FlickrPhotoAnnotation class]]) {
+        FlickrPhotoAnnotation *fpa = (FlickrPhotoAnnotation *)view.annotation;
+        
+        NSDictionary *photo = fpa.photo;
+        if(self.splitViewController) {
+            id detail = [self.splitViewController.viewControllers lastObject];
+            if([detail isKindOfClass:[PhotoScrollViewController class]]) {
+                PhotoScrollViewController *photoVC = detail;
+                photoVC.photo = photo;
+                if([photo objectForKey:@"title"] != @"") {
+                    photoVC.navigationItem.title =[photo objectForKey:@"title"];
+                } else {
+                    photoVC.navigationItem.title = @"Unknown";
+                }
+            }
+        } else {
+            [self performSegueWithIdentifier:@"View Photo" sender:fpa];
+        }
+    } else if([view.annotation isKindOfClass:[FlickrPlaceAnnotation class]]){
+        FlickrPlaceAnnotation *fpa = (FlickrPlaceAnnotation *)view.annotation;
+        
+        [self performSegueWithIdentifier:@"View Photos From Place" sender:fpa];
+    }
 }
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     if([view.annotation isKindOfClass:[FlickrPhotoAnnotation class]]) {
