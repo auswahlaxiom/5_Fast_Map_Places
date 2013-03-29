@@ -9,8 +9,8 @@
 #import "PhotosFromPlaceTVC.h"
 #import "FlickrFetcher.h"
 #import "PhotoScrollViewController.h"
-#import "MapViewController.h"
-#import "FlickerPhotoAnnotation.h"
+#import "FlickrMapViewController.h"
+#import "FlickrPhotoAnnotation.h"
 
 @interface PhotosFromPlaceTVC ()
 @end
@@ -20,6 +20,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UINavigationItem *oldbutton = self.navigationItem.rightBarButtonItem;
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [spinner startAnimating];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
@@ -31,6 +32,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             self.picturesData = photos;
             [spinner stopAnimating];
+            self.navigationItem.rightBarButtonItem = oldbutton;
         });
     });
 }
@@ -39,6 +41,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+    
     NSDictionary *selectedPic = [self.picturesData objectAtIndex:indexPath.row];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableArray *recent = [[defaults objectForKey:@"FlickrFetcherRecentPictures"] mutableCopy];

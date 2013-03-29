@@ -46,9 +46,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Top Places" id="2ro-zE-joW">
-                        <barButtonItem key="rightBarButtonItem" title="Refresh" id="evD-kB-I3h">
+                        <barButtonItem key="rightBarButtonItem" title="View Map" id="xJr-ZF-R8W">
                             <connections>
-                                <action selector="refresh:" destination="5Nc-57-wXc" id="6Sj-DV-wbU"/>
+                                <segue destination="foQ-J5-vqH" kind="push" identifier="View Map" id="HZ9-01-elN"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -56,6 +56,30 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FkA-om-4Em" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1800" y="34"/>
+        </scene>
+        <!--Flickr Map View Controller-->
+        <scene sceneID="5Kd-2P-sKF">
+            <objects>
+                <viewController id="foQ-J5-vqH" customClass="FlickrMapViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4Fe-ix-DeE">
+                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="ZcQ-gz-2QB">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ARp-Wr-uPL"/>
+                    <connections>
+                        <outlet property="mapView" destination="ZcQ-gz-2QB" id="eAC-Dv-IA7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vno-On-6T7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2260" y="-624"/>
         </scene>
         <!--Photo Scroll View Controller - Photo-->
         <scene sceneID="36J-ne-dnz">

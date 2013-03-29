@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
 
-@interface FlickerPhotoAnnotation : NSObject <MKAnnotation>
-+(FlickerPhotoAnnotation *)annotationForPhoto:(NSDictionary *)photo;
+@interface FlickrPhotoAnnotation : NSObject <MKAnnotation>
++(FlickrPhotoAnnotation *)annotationForPhoto:(NSDictionary *)photo;
 @property (nonatomic, strong) NSDictionary *photo;
 
 @end

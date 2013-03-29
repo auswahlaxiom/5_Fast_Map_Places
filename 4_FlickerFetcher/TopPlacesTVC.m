@@ -9,26 +9,16 @@
 #import "TopPlacesTVC.h"
 #import "FlickrFetcher.h"
 #import "PhotosFromPlaceTVC.h"
+#import "FlickrMapViewController.h"
+#import "FlickrPlaceAnnotation.h"
 
 @interface TopPlacesTVC ()
-@property NSArray *topData;
+@property NSArray *topPlaceData;
 @end
 
 @implementation TopPlacesTVC
 
-@synthesize topData = _topData;
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-- (IBAction)refresh:(UIBarButtonItem *)sender {
-    [self viewDidLoad];
-}
+@synthesize topPlaceData = _topPlaceData;
 
 - (void)viewDidLoad
 {
@@ -44,28 +34,31 @@
     dispatch_async(downlaodQueue, ^{
         NSArray *places = [[FlickrFetcher topPlaces] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sort]];
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.topData = places;
+            self.topPlaceData = places;
             [spinner stopAnimating];
             self.navigationItem.rightBarButtonItem = oldButton;
         });
     });
 }
 
-- (void)setTopData:(NSArray *)data {
-    if(_topData != data) {
-        _topData = data;
+- (void)setTopPlaceData:(NSArray *)data {
+    if(_topPlaceData != data) {
+        _topPlaceData = data;
         if(self.tableView.window) [self.tableView reloadData];
     }
 }
-- (NSArray *)topData {
-    return _topData;
+- (NSArray *)topPlaceData {
+    return _topPlaceData;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(NSArray *)mapAnnotations {
+    NSMutableArray *annotations = [NSMutableArray arrayWithCapacity:[self.topPlaceData count]];
+    for(NSDictionary *dict in self.topPlaceData) {
+        [annotations addObject:[FlickrPlaceAnnotation annotationForPlace:dict]];
+    }
+    return annotations;
 }
+
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -73,10 +66,14 @@
         PhotosFromPlaceTVC *dest = segue.destinationViewController;
         
         //selectedPlace is set when a cell is selected
-        NSDictionary *place = [self.topData objectAtIndex:self.tableView.indexPathForSelectedRow.row];
+        NSDictionary *place = [self.topPlaceData objectAtIndex:self.tableView.indexPathForSelectedRow.row];
         dest.place = place;
         dest.navigationItem.title = [[[place objectForKey:@"_content"] componentsSeparatedByString:@", "] objectAtIndex:0];
         
+    } else if([[segue identifier] isEqualToString:@"View Map"]) {
+        FlickrMapViewController *dest = segue.destinationViewController;
+        dest.navigationItem.title = @"Top Places";
+        dest.annotations = [self mapAnnotations];
     }
 }
 
@@ -85,7 +82,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.topData.count;
+    return self.topPlaceData.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -95,7 +92,7 @@
     
     if(!cell) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     
-    NSString *place = [[self.topData objectAtIndex:indexPath.row] objectForKey:@"_content"];
+    NSString *place = [[self.topPlaceData objectAtIndex:indexPath.row] objectForKey:@"_content"];
     
     NSArray *placeParts = [place componentsSeparatedByString:@", "];
     

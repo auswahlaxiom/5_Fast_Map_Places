@@ -9,8 +9,8 @@
 #import "RecentPhotosTVC.h"
 #import "Flickrfetcher.h"
 #import "PhotoScrollViewController.h"
-#import "MapViewController.h"
-#import "FlickerPhotoAnnotation.h"
+#import "FlickrMapViewController.h"
+#import "FlickrPhotoAnnotation.h"
 
 @interface RecentPhotosTVC ()
 

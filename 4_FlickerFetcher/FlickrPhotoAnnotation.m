@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 Zachary Fleischman. All rights reserved.
 //
 
-#import "FlickerPhotoAnnotation.h"
+#import "FlickrPhotoAnnotation.h"
 #import "FlickrFetcher.h"
 
-@implementation FlickerPhotoAnnotation
+@implementation FlickrPhotoAnnotation
 @synthesize photo = _photo;
-+(FlickerPhotoAnnotation *)annotationForPhoto:(NSDictionary *)photo {
-    FlickerPhotoAnnotation *annotation = [[FlickerPhotoAnnotation alloc] init];
++(FlickrPhotoAnnotation *)annotationForPhoto:(NSDictionary *)photo {
+    FlickrPhotoAnnotation *annotation = [[FlickrPhotoAnnotation alloc] init];
     annotation.photo = photo;
     return annotation;
 }

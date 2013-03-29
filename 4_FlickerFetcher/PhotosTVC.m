@@ -10,9 +10,11 @@
 
 #import "FlickrFetcher.h"
 #import "PhotoScrollViewController.h"
-#import "MapViewController.h"
-#import "FlickerPhotoAnnotation.h"
-@interface PhotosTVC () <MapViewControllerDelegate>
+#import "FlickrMapViewController.h"
+#import "FlickrPhotoAnnotation.h"
+#import "PhotoScrollViewController.h"
+
+@interface PhotosTVC ()
 @end
 
 @implementation PhotosTVC
@@ -26,7 +28,6 @@
     if(_picturesData != data) {
         _picturesData = data;
         if(self.tableView.window) [self.tableView reloadData];
-        [self updateSplitViewDetail];
     }
 }
 - (NSArray *)picturesData {
@@ -35,25 +36,12 @@
 -(NSArray *)mapAnnotations {
     NSMutableArray *annotations = [NSMutableArray arrayWithCapacity:[self.picturesData count]];
     for(NSDictionary *dict in self.picturesData) {
-        [annotations addObject:[FlickerPhotoAnnotation annotationForPhoto:dict]];
+        [annotations addObject:[FlickrPhotoAnnotation annotationForPhoto:dict]];
     }
     return annotations;
 }
--(void) updateSplitViewDetail {
-    id detail = [self.splitViewController.viewControllers lastObject];
-    if([detail isKindOfClass:[MapViewController class]]) {
-        MapViewController *mapVC = (MapViewController *)detail;
-        mapVC.annotations = [self mapAnnotations];
-        mapVC.delegate = self;
-    }
-}
--(UIImage *)mapViewController:(MapViewController *)sender imageForAnnotation:(id<MKAnnotation>)annotation {
-    FlickerPhotoAnnotation *fpa = (FlickerPhotoAnnotation *)annotation;
-    NSURL *url = [FlickrFetcher urlForPhoto:fpa.photo format:FlickrPhotoFormatSquare];
-    NSData *data = [NSData dataWithContentsOfURL:url];
-    return data ? [UIImage imageWithData:data] : nil;
-    
-}
+
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"View Photo"]) {
@@ -65,7 +53,9 @@
         } else {
             dest.navigationItem.title = @"Unknown";
         }
-        
+    } else if([[segue identifier] isEqualToString:@"View Map"]) {
+        FlickrMapViewController *dest = segue.destinationViewController;
+        dest.annotations = [self mapAnnotations];
     }
 }
 #pragma mark - Table view data source
@@ -88,9 +78,36 @@
     
     cell.detailTextLabel.text = @"Unknown";
     if([picInfo valueForKeyPath:@"description._content"]) cell.detailTextLabel.text = [picInfo valueForKeyPath:@"description._content"];
+    char* threadName = "image downloader" + indexPath.section + indexPath.row;
     
+    dispatch_queue_t downlaodQueue = dispatch_queue_create(threadName, NULL);
+    dispatch_async(downlaodQueue, ^{
+        NSURL *photoURL = [FlickrFetcher urlForPhoto:picInfo format:FlickrPhotoFormatSquare];
+        NSData *photoData = [NSData dataWithContentsOfURL:photoURL];
+        UIImage *photoImage = [UIImage imageWithData:photoData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            cell.imageView.image = photoImage;
+        });
+    });
+
     
     return cell;
 }
+#pragma mark - Table view delegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    id detail = [self.splitViewController.viewControllers lastObject];
+    if([detail isKindOfClass:[PhotoScrollViewController class]]) {
+        PhotoScrollViewController *photoVC = detail;
+        NSDictionary *photo = [self.picturesData objectAtIndex:self.tableView.indexPathForSelectedRow.row];
+        photoVC.photo = photo;
+        if([photo objectForKey:@"title"] != @"") {
+            photoVC.navigationItem.title =[photo objectForKey:@"title"];
+        } else {
+            photoVC.navigationItem.title = @"Unknown";
+        }
+        [photoVC viewDidLoad];
+    }
+}
+
 
 @end
