@@ -156,7 +156,13 @@
                             <outlet property="delegate" destination="THb-tS-qUY" id="2gw-fg-s3x"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="A Place" id="nwP-Ln-fzP"/>
+                    <navigationItem key="navigationItem" title="A Place" id="nwP-Ln-fzP">
+                        <barButtonItem key="rightBarButtonItem" title="View Map" id="gjY-lb-E7q">
+                            <connections>
+                                <segue destination="foQ-J5-vqH" kind="push" identifier="View Map" id="ck7-18-keM"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="82p-Xq-U6k" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -203,7 +209,13 @@
                             <outlet property="delegate" destination="Fzk-QV-Ewy" id="irI-uj-Ch3"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Recent Photos" id="s3n-cA-iE1"/>
+                    <navigationItem key="navigationItem" title="Recent Photos" id="s3n-cA-iE1">
+                        <barButtonItem key="rightBarButtonItem" title="View Map" id="02C-1o-B2S">
+                            <connections>
+                                <segue destination="foQ-J5-vqH" kind="push" identifier="View Map" id="Dm2-2v-1z7"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gih-Qi-BBB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -273,6 +285,7 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="vlM-sV-CEU"/>
+        <segue reference="K6y-En-279"/>
+        <segue reference="Dm2-2v-1z7"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PhotoScrollViewController : UIViewController <UIScrollViewDelegate>
+@interface PhotoScrollViewController : UIViewController <UIScrollViewDelegate, UISplitViewControllerDelegate>
 @property (weak, nonatomic) NSDictionary *photo;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+
+//delegate properties
+@property (strong, nonatomic) UIPopoverController *popover;
+@property (weak, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *toolbarSpinner;
 
 @end

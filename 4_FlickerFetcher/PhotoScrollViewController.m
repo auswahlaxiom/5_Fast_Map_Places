@@ -14,17 +14,30 @@
 @end
 
 @implementation PhotoScrollViewController
-@synthesize scrollView;
-@synthesize imageView;
+@synthesize scrollView = _scrollView;
+@synthesize imageView = _imageView;
+@synthesize toolbar = _toolbar;
+@synthesize popover = _popover;
+@synthesize photo = _photo;
+@synthesize toolbarSpinner = _toolbarSpinner;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.splitViewController.delegate = self;
+    [self refreshImage];
+}
+
+-(void)refreshImage {
     //make spinner
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [spinner startAnimating];
+    if(self.toolbarSpinner) {
+        [self.toolbarSpinner startAnimating];
+    }
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
-	
+    
+    
     //use GCD to load image
     dispatch_queue_t downlaodQueue = dispatch_queue_create("image downloader", NULL);
     dispatch_async(downlaodQueue, ^{
@@ -53,10 +66,22 @@
                 }
             }
             [spinner stopAnimating];
+            if(self.toolbarSpinner) {
+                [self.toolbarSpinner stopAnimating];
+            }
         });
     });
-    //dispatch_release(downlaodQueue);
 
+}
+
+-(void)setPhoto:(NSDictionary *)photo {
+    if(_photo != photo) {
+        _photo = photo;
+        [self refreshImage];
+        if(self.popover != nil) {
+            [self.popover dismissPopoverAnimated:YES];
+        }
+    }
 }
 
 -(UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
@@ -64,13 +89,28 @@
 }
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-    } else {
-        return YES;
-    }
+    return YES;
 }
 
+#pragma mark split view controller delegate
+- (void)splitViewController: (UISplitViewController*)svc
+     willHideViewController:(UIViewController *)aViewController
+          withBarButtonItem:(UIBarButtonItem*)barButtonItem
+       forPopoverController: (UIPopoverController*)pc {
+    barButtonItem.title = @"Photos";
+    NSMutableArray *items = [[self.toolbar items] mutableCopy];
+    [items insertObject:barButtonItem atIndex:0];
+    [self.toolbar setItems:items animated:YES];
+    self.popover = pc;
+}
+
+- (void)splitViewController: (UISplitViewController*)svc
+     willShowViewController:(UIViewController *)aViewController
+  invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+    NSMutableArray *items = [[self.toolbar items] mutableCopy];
+    [items removeObjectAtIndex:0];
+    [self.toolbar setItems:items animated:YES];
+    self.popover = nil;
+}
 
 @end

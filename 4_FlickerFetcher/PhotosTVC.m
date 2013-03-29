@@ -105,7 +105,6 @@
         } else {
             photoVC.navigationItem.title = @"Unknown";
         }
-        [photoVC viewDidLoad];
     }
 }
 
