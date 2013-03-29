@@ -29,48 +29,81 @@
 }
 
 -(void)refreshImage {
-    //make spinner
-    UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    [spinner startAnimating];
-    if(self.toolbarSpinner) {
-        [self.toolbarSpinner startAnimating];
-    }
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+    //File Manager caching check
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSString *cachePath = [[[manager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask] lastObject] path];
+    NSString *photoPath = [cachePath stringByAppendingPathComponent:[self.photo objectForKey:@"id"]];
     
-    
-    //use GCD to load image
-    dispatch_queue_t downlaodQueue = dispatch_queue_create("image downloader", NULL);
-    dispatch_async(downlaodQueue, ^{
-        NSURL *photoURL = [FlickrFetcher urlForPhoto:self.photo format:FlickrPhotoFormatOriginal];
-        NSData *photoData = [NSData dataWithContentsOfURL:photoURL];
-        UIImage *photoImage = [UIImage imageWithData:photoData];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.imageView.image = photoImage;
-            if(photoImage) {
-                self.scrollView.contentSize = self.imageView.image.size;
-                self.imageView.frame = CGRectMake(0, 0, self.imageView.image.size.width, self.imageView.image.size.height);
-                
-                CGFloat vScale = self.scrollView.frame.size.height / self.imageView.image.size.height;
-                CGFloat hScale = self.scrollView.frame.size.width / self.imageView.image.size.width;
-                
-                //adjust min/max zoom scales for image if neccessary
-                if(MIN(vScale, hScale) < self.scrollView.minimumZoomScale) self.scrollView.minimumZoomScale = MIN(vScale, hScale);
-                if(MAX(vScale, hScale) > self.scrollView.maximumZoomScale) self.scrollView.maximumZoomScale = MAX(vScale, hScale);
-                
-                //initial zoom state such that there are no blank bars, and the image is as big as possible while still all fitting in
-                if(vScale < hScale) {
-                    [self.scrollView setZoomScale:hScale animated:YES];
-                } else {
-                    [self.scrollView setZoomScale:vScale animated:YES];
+    if([manager fileExistsAtPath:photoPath]) {
+        NSData *photoData = [manager contentsAtPath:photoPath];
+        [self setImageViewPhoto:[UIImage imageWithData:photoData]];
+    } else {
+        //make spinner
+        UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [spinner startAnimating];
+        if(self.toolbarSpinner) {
+            [self.toolbarSpinner startAnimating];
+        }
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+
+
+        //use GCD to load image
+        dispatch_queue_t downlaodQueue = dispatch_queue_create("image downloader", NULL);
+        dispatch_async(downlaodQueue, ^{
+            NSURL *photoFlickrURL = [FlickrFetcher urlForPhoto:self.photo format:FlickrPhotoFormatOriginal];
+            NSData *photoData = [NSData dataWithContentsOfURL:photoFlickrURL];
+            //cache image:
+            [manager createFileAtPath:photoPath contents:photoData attributes:nil];
+            //check cache size
+            NSNumber *cacheSize = [[manager attributesOfItemAtPath:cachePath error:nil] objectForKey:NSFileSize];
+            NSLog([cacheSize stringValue]);
+            if([cacheSize intValue] > 1000) {
+                NSArray *cacheFiles = [manager contentsOfDirectoryAtPath:cachePath error:nil];
+                NSString *oldest = [cacheFiles objectAtIndex:0];
+                for(NSString *aPath in cacheFiles) {
+                    NSDate *curOldest = [[manager attributesOfItemAtPath:oldest error:nil] objectForKey:NSFileCreationDate];
+                    NSDate *compare = [[manager attributesOfItemAtPath:aPath error:nil] objectForKey:NSFileCreationDate];
+                    if([curOldest earlierDate:compare] == compare) {
+                        oldest = aPath;
+                    }
                 }
+                [manager removeItemAtPath:oldest error:nil];
             }
-            [spinner stopAnimating];
-            if(self.toolbarSpinner) {
-                [self.toolbarSpinner stopAnimating];
-            }
+            
+            UIImage *photoImage = [UIImage imageWithData:photoData];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setImageViewPhoto:photoImage];
+                [spinner stopAnimating];
+                if(self.toolbarSpinner) {
+                    [self.toolbarSpinner stopAnimating];
+                }
+            });
         });
-    });
+    }
+
+}
+
+-(void)setImageViewPhoto: (UIImage *)photoImage {
+    self.imageView.image = photoImage;
+    if(photoImage) {
+        self.scrollView.contentSize = self.imageView.image.size;
+        self.imageView.frame = CGRectMake(0, 0, self.imageView.image.size.width, self.imageView.image.size.height);
+        
+        CGFloat vScale = self.scrollView.frame.size.height / self.imageView.image.size.height;
+        CGFloat hScale = self.scrollView.frame.size.width / self.imageView.image.size.width;
+        
+        //adjust min/max zoom scales for image if neccessary
+        if(MIN(vScale, hScale) < self.scrollView.minimumZoomScale) self.scrollView.minimumZoomScale = MIN(vScale, hScale);
+        if(MAX(vScale, hScale) > self.scrollView.maximumZoomScale) self.scrollView.maximumZoomScale = MAX(vScale, hScale);
+        
+        //initial zoom state such that there are no blank bars, and the image is as big as possible while still all fitting in
+        if(vScale < hScale) {
+            [self.scrollView setZoomScale:hScale animated:YES];
+        } else {
+            [self.scrollView setZoomScale:vScale animated:YES];
+        }
+    }
 
 }
 

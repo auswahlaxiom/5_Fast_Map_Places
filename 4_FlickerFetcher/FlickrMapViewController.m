@@ -69,8 +69,9 @@
     if(!aView) {
         aView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"MapVC"];
         aView.canShowCallout = YES;
-        aView.leftCalloutAccessoryView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-        
+        if([annotation isKindOfClass:[FlickrPhotoAnnotation class]]) {
+            aView.leftCalloutAccessoryView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+        }
     }
     UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
     aView.rightCalloutAccessoryView = rightButton;
